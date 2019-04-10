@@ -54,22 +54,29 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "", "", "", "", "", "", "", "", "" };
+static const char *tags[] = { "", "", "", "", "", "", "", "", "" };
 
 static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            0,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
-	{ "Google-chrome",NULL,   NULL,       1 << 7,       0,           -1 },
-	{ "Slack",    NULL,       NULL,       1 << 6,       0,           -1 },
-	{ "Guake",    NULL,       NULL,       ~0,           1,           -1 },
-	{ "copyq",    NULL,       NULL,       0,            1,           -1 },
-	{ "Hexchat",  NULL,       NULL,       1 << 4,       0,           -1 },
-	{ NULL,       NULL,       "Cmus",     1 << 5,       0,           -1 },
+	/* class                  instance    title       tags mask     isfloating   monitor */
+	{ "Gnome-terminal",       NULL,       NULL,       1 << 0,       0,           -1 },
+	{ "Org.gnome.Nautilus",   NULL,       NULL,       1 << 1,       0,           -1 },
+	{ "Gimp",                 NULL,       NULL,       1 << 3,       0,           -1 },
+	{ "krita",                NULL,       NULL,       1 << 3,       0,           -1 },
+	{ "Evolution",            NULL,       NULL,       1 << 4,       0,           -1 },
+	{ "Clementine",           NULL,       NULL,       1 << 5,       0,           -1 },
+	{ "Slack",                NULL,       NULL,       1 << 6,       0,           -1 },
+	{ "Firefox",              NULL,       NULL,       1 << 7,       0,           -1 },
+	{ "Google-chrome",        NULL,       NULL,       1 << 7,       0,           -1 },
+	{ "Chromium",             NULL,       NULL,       1 << 7,       0,           -1 },
+	{ "code-oss",             NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "Guake",                NULL,       NULL,       ~0,           1,           -1 },
+	{ "copyq",                NULL,       NULL,       0,            1,           -1 },
+	{ "Hexchat",              NULL,       NULL,       1 << 4,       0,           -1 },
+	{ NULL,                   NULL,       "Cmus",     1 << 5,       0,           -1 },
 };
 
 /* layout(s) */
@@ -105,49 +112,50 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "gnome-terminal", NULL };
 
 static Key keys[] = {
-	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_p,      spawn,          SHCMD("rofi -show run") },
-	{ ALTMOD|ShiftMask,             XK_x,      spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_e,      spawn,          SHCMD("nautilus") },
-	{ 0,			  XF86XK_AudioLowerVolume, spawn,          SHCMD("amixer set Master 5%-") },
-	{ 0,			  XF86XK_AudioRaiseVolume, spawn,          SHCMD("amixer set Master 5%+") },
-	{ 0,			  XF86XK_AudioMute,        spawn,          SHCMD("amixer set Master toggle") },
-	{ MODKEY,                       XK_Menu,   spawn,          SHCMD("rofi -show combi") },
-	{ MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("rofi -show combi") },
-	{ MODKEY|ControlMask,           XK_p,      spawn,          SHCMD("passmenu_rofi") },
-	{ MODKEY|ControlMask,           XK_Menu,   spawn,          SHCMD("passmenu_rofi") },
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ ALTMOD,                       XK_Tab,    focusstack,     {.i = +1 } },
-	{ ALTMOD|ShiftMask,             XK_Tab,    focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
-	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY,                       XK_Return, zoom,           {0} },
-	{ ALTMOD,                       XK_grave,  view,           {0} },
-	{ ALTMOD|ShiftMask,             XK_c,      killclient,     {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                       XK_g,      setlayout,      {.v = &layouts[3]} },
-	{ MODKEY,                       XK_space,  setlayout,      {0} },
-	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
-	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	TAGKEYS(                        XK_1,                      0)
-	TAGKEYS(                        XK_2,                      1)
-	TAGKEYS(                        XK_3,                      2)
-	TAGKEYS(                        XK_4,                      3)
-	TAGKEYS(                        XK_5,                      4)
-	TAGKEYS(                        XK_6,                      5)
-	TAGKEYS(                        XK_7,                      6)
-	TAGKEYS(                        XK_8,                      7)
-	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	/* modifier                     key        								function        argument */
+	{ MODKEY,                       XK_p,      								spawn,          SHCMD("rofi -show run") },
+	{ ALTMOD|ShiftMask,             XK_x,      								spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_e,      								spawn,          SHCMD("nautilus") },
+	{ MODKEY,			  								XK_Left, 									spawn,          SHCMD("amixer set Master 5%-") },
+	{ MODKEY,			  								XK_Right, 								spawn,          SHCMD("amixer set Master 5%+") },
+	{ MODKEY,			  								XK_Down,				        	spawn,          SHCMD("amixer set Master toggle") },
+	{ MODKEY,                       XK_Menu,   								spawn,          SHCMD("rofi -show combi") },
+	{ MODKEY|ShiftMask,             XK_p,      								spawn,          SHCMD("rofi -show combi") },
+	{ MODKEY|ControlMask,           XK_p,      								spawn,          SHCMD("passmenu_rofi") },
+	{ MODKEY|ControlMask,           XK_Menu,   								spawn,          SHCMD("passmenu_rofi") },
+	{ MODKEY,                       XK_b,      								togglebar,      {0} },
+	{ ALTMOD,                       XK_Tab,    								focusstack,     {.i = +1 } },
+	{ ALTMOD|ShiftMask,             XK_Tab,    								focusstack,     {.i = -1 } },
+	{ MODKEY,                       XK_i,      								incnmaster,     {.i = +1 } },
+	{ MODKEY,                       XK_d,      								incnmaster,     {.i = -1 } },
+	{ ALTMOD|ControlMask,           XK_h,      								setmfact,       {.f = -0.05} },
+	{ ALTMOD|ControlMask,           XK_l,      								setmfact,       {.f = +0.05} },
+	{ MODKEY,           						XK_l,      								spawn,          SHCMD("sxlock") },
+	{ MODKEY,                       XK_Return, 								zoom,           {0} },
+	{ ALTMOD,                       XK_grave,  								view,           {0} },
+	{ ALTMOD|ShiftMask,             XK_c,      								killclient,     {0} },
+	{ MODKEY,                       XK_t,      								setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_f,      								setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_m,      								setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,                       XK_g,      								setlayout,      {.v = &layouts[3]} },
+	{ MODKEY,                       XK_space,  								setlayout,      {0} },
+	{ MODKEY|ShiftMask,             XK_space,  								togglefloating, {0} },
+	{ MODKEY,                       XK_0,      								view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             XK_0,      								tag,            {.ui = ~0 } },
+	{ MODKEY,                       XK_comma,  								focusmon,       {.i = -1 } },
+	{ MODKEY,                       XK_period, 								focusmon,       {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_comma,  								tagmon,         {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_period, 								tagmon,         {.i = +1 } },
+	TAGKEYS(                        XK_1,      								                0)
+	TAGKEYS(                        XK_2,      								                1)
+	TAGKEYS(                        XK_3,      								                2)
+	TAGKEYS(                        XK_4,      								                3)
+	TAGKEYS(                        XK_5,      								                4)
+	TAGKEYS(                        XK_6,      								                5)
+	TAGKEYS(                        XK_7,      								                6)
+	TAGKEYS(                        XK_8,      								                7)
+	TAGKEYS(                        XK_9,      								                8)
+	{ MODKEY|ShiftMask,             XK_q,      								quit,           {0} },
 };
 
 /* button definitions */
